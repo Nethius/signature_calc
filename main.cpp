@@ -36,11 +36,15 @@ void readFileTask(SafeQueue<std::shared_ptr<char>>& queue, const size_t blockSiz
     std::fstream fs;
     try{
         fs.open (path, std::fstream::in | std::fstream::binary);
+        if (!fs)
+            throw 0;
     }
     catch (...) {
         std::cout << "cant open file " << path << std::endl;
+        isFileReaded = true;
         return;
     }
+
     fs.seekg (0, fs.end);
     size_t length = fs.tellg();
     fs.seekg (0, fs.beg);
@@ -65,6 +69,8 @@ void writeFileTask(const std::string& path, SafeQueue<uint32_t>& writeQueue, boo
     std::fstream fs;
     try {
         fs.open(path, std::fstream::out | std::fstream::binary);
+        if (!fs)
+            throw 0;
     }
     catch (...) {
         std::cout << "cant open file " << path << std::endl;
