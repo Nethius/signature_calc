@@ -83,15 +83,6 @@
 		<Unit filename="C:/Users/developer_stag/CLionProjects/signature_calc/main.cpp">
 			<Option target="signature_calc"/>
 		</Unit>
-		<Unit filename="C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.cpp">
-			<Option target="signature_calc"/>
-		</Unit>
-		<Unit filename="C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h">
-			<Option target="signature_calc"/>
-		</Unit>
-		<Unit filename="C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.cpp">
-			<Option target="signature_calc"/>
-		</Unit>
 		<Unit filename="C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h">
 			<Option target="signature_calc"/>
 		</Unit>

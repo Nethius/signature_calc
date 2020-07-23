@@ -149,60 +149,6 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-safeMap.obj: safeMap.cpp.obj
-
-.PHONY : safeMap.obj
-
-# target to build an object file
-safeMap.cpp.obj:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeMap.cpp.obj
-.PHONY : safeMap.cpp.obj
-
-safeMap.i: safeMap.cpp.i
-
-.PHONY : safeMap.i
-
-# target to preprocess a source file
-safeMap.cpp.i:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeMap.cpp.i
-.PHONY : safeMap.cpp.i
-
-safeMap.s: safeMap.cpp.s
-
-.PHONY : safeMap.s
-
-# target to generate assembly for a file
-safeMap.cpp.s:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeMap.cpp.s
-.PHONY : safeMap.cpp.s
-
-safeQueue.obj: safeQueue.cpp.obj
-
-.PHONY : safeQueue.obj
-
-# target to build an object file
-safeQueue.cpp.obj:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeQueue.cpp.obj
-.PHONY : safeQueue.cpp.obj
-
-safeQueue.i: safeQueue.cpp.i
-
-.PHONY : safeQueue.i
-
-# target to preprocess a source file
-safeQueue.cpp.i:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeQueue.cpp.i
-.PHONY : safeQueue.cpp.i
-
-safeQueue.s: safeQueue.cpp.s
-
-.PHONY : safeQueue.s
-
-# target to generate assembly for a file
-safeQueue.cpp.s:
-	$(MAKE) -f CMakeFiles\signature_calc.dir\build.make CMakeFiles/signature_calc.dir/safeQueue.cpp.s
-.PHONY : safeQueue.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -215,12 +161,6 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
-	@echo ... safeMap.obj
-	@echo ... safeMap.i
-	@echo ... safeMap.s
-	@echo ... safeQueue.obj
-	@echo ... safeQueue.i
-	@echo ... safeQueue.s
 .PHONY : help
 
 

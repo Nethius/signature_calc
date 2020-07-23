@@ -1,7 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/signature_calc.dir/main.cpp.obj"
-  "CMakeFiles/signature_calc.dir/safeMap.cpp.obj"
-  "CMakeFiles/signature_calc.dir/safeQueue.cpp.obj"
   "libsignature_calc.dll.a"
   "signature_calc.exe"
   "signature_calc.exe.manifest"

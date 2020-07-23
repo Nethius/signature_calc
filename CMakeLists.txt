@@ -3,4 +3,4 @@ project(signature_calc)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(signature_calc main.cpp safeQueue.cpp safeQueue.h safeMap.cpp safeMap.h)
+add_executable(signature_calc main.cpp safeQueue.h)

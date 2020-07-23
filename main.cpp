@@ -4,7 +4,8 @@
 #include <fstream>
 #include <future>
 #include "safeQueue.h"
-#include "safeMap.h"
+#include <cstring>
+#include <filesystem>
 
 uint32_t crc32Stream(uint32_t sum, std::shared_ptr<char> ptr, size_t count, uint32_t polynom)
 {
@@ -18,21 +19,19 @@ uint32_t crc32Stream(uint32_t sum, std::shared_ptr<char> ptr, size_t count, uint
     return sum;
 }
 
-void calcCrcTask(SafeQueue& queue, const size_t blockSize, bool& isFileReaded, SafeMap& map, size_t threadNum)
+void calcCrcTask(SafeQueue<std::shared_ptr<char>>& queue, const size_t blockSize, bool& isFileReaded, SafeQueue<uint32_t>& writeQueue, size_t threadNum)
 {
     while(!isFileReaded || queue.size()) {
-        std::shared_ptr<char> ptr = queue.frontAndPop();
-        if (ptr.get()) {
-            uint32_t value = crc32Stream(0xFFFFFFFF, ptr, blockSize, 0xEDB88320);
-            map.insert(value);
+        std::pair<size_t, std::shared_ptr<char>> dataBlock = queue.frontAndPop();
+        if (dataBlock.second.get()) {
+            uint32_t value = crc32Stream(0xFFFFFFFF, dataBlock.second, blockSize, 0xEDB88320);
+            writeQueue.push(value, dataBlock.first);
             std::cout << value << " crc inserted, thread " << threadNum << std::endl;
         }
     }
 }
 
-
-
-void readFileTask(SafeQueue& queue, const size_t blockSize, bool& isFileReaded, std::string path)
+void readFileTask(SafeQueue<std::shared_ptr<char>>& queue, const size_t blockSize, bool& isFileReaded, std::string path)
 {
     std::fstream fs;
     try{
@@ -47,36 +46,39 @@ void readFileTask(SafeQueue& queue, const size_t blockSize, bool& isFileReaded, 
     fs.seekg (0, fs.beg);
     std::cout << "Reading " << length << " characters... " << std::endl;
 
+    size_t index = 0;
+
     while (!fs.eof())
     {
         std::shared_ptr<char> bufPtr(new char[blockSize]);
+        memset(bufPtr.get(), 0, blockSize);
         fs.read(bufPtr.get(), blockSize);
-        queue.push(bufPtr);
+        queue.push(bufPtr, index);
+        index++;
     }
     isFileReaded = true;
     fs.close();
 }
 
-void writeFileTask(std::string path, SafeMap& map, bool& isCalcEnded)
+void writeFileTask(const std::string& path, SafeQueue<uint32_t>& writeQueue, bool& isCalcEnded)
 {
     std::fstream fs;
     try {
-        fs.open(path, std::fstream::out);
+        fs.open(path, std::fstream::out | std::fstream::binary);
     }
     catch (...) {
         std::cout << "cant open file " << path << std::endl;
         return;
     }
-    size_t index = 0;
 
-    while(!isCalcEnded || map.size())
+    while(!isCalcEnded || writeQueue.size())
     {
-        uint32_t value = map.getAndErase(index);
-        if (value)
+        std::pair<size_t, uint32_t> hash = writeQueue.frontAndPop();
+        if (hash.second)
         {
-            std::cout << value << " crc of chunk " << index << std::endl;
-            fs << value << " ";
-            index++;
+            std::cout << hash.second << " crc of chunk " << hash.first << std::endl;
+            fs.seekg(hash.first * sizeof(uint32_t));
+            fs.write(reinterpret_cast<char*>(&hash.second), sizeof(uint32_t));
         }
     }
     fs.close();
@@ -87,56 +89,61 @@ int main() {
     std::string inputFile;
     std::cin >> inputFile;
 
-    std::cout << "Enter path for input file: " << std::endl;
+    std::cout << "Enter path for output file: " << std::endl;
     std::string outputFile;
     std::cin >> outputFile;
 
     std::cout << "Enter block size: " << std::endl;
-    size_t blockSize;
+    size_t blockSize = 1024*1024;
     std::cin >> blockSize;
 
-    std::cout << "Enter thread count: " << std::endl;
+    std::cout << "Enter thread count, min count 3: " << std::endl;
     size_t threadCount;
     std::cin >> threadCount;
-
+    if (threadCount < 3)
+        threadCount = 3;
     auto start = std::chrono::high_resolution_clock::now();
 
-    SafeQueue queue;
-    SafeMap map;
+    SafeQueue<std::shared_ptr<char>> readQueue;
+    SafeQueue<uint32_t> writeQueue;
     bool isFileReaded = false;
     bool isCalcEnded = false;
     std::future<void> readRes;
     std::future<void> writeRes;
 
     try {
-        readRes = std::async(readFileTask, std::ref(queue), blockSize, std::ref(isFileReaded), inputFile);
+        readRes = std::async(readFileTask, std::ref(readQueue), blockSize, std::ref(isFileReaded), inputFile);
     }
     catch (...) {
         std::cout << "Error with read task occurred" << std::endl;
+        return 0;
     }
     try {
-        writeRes = std::async(writeFileTask, outputFile, std::ref(map), std::ref(isCalcEnded));
+        writeRes = std::async(writeFileTask, outputFile, std::ref(writeQueue), std::ref(isCalcEnded));
     }
     catch (...) {
         std::cout << "Error with write task occurred" << std::endl;
+        return 0;
     }
 
     std::vector<std::future<void>> futures;
-    for (size_t i = 0; i < threadCount; i++) {
+    for (size_t i = 0; i < threadCount - 2; i++) {
         try {
             futures.push_back(
-                    std::async(calcCrcTask, std::ref(queue), blockSize, std::ref(isFileReaded), std::ref(map), i));
+                    std::async(calcCrcTask, std::ref(readQueue), blockSize, std::ref(isFileReaded), std::ref(writeQueue), i));
         }
         catch (...) {
             std::cout << "Error with calc task occurred" << std::endl;
+            return 0;
         }
     }
 
-    for (size_t i = 0; i < threadCount; i++)
+    for (size_t i = 0; i < threadCount - 2; i++)
         futures[i].wait();
     isCalcEnded = true;
 
     writeRes.wait();
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Time from start: " << std::chrono::duration_cast<std::chrono::seconds>(end - start).count() << " seconds" << std::endl;
+    return 0;
 }

@@ -5,8 +5,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "C:/Users/developer_stag/CLionProjects/signature_calc/main.cpp" "C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/signature_calc.dir/main.cpp.obj"
-  "C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.cpp" "C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/signature_calc.dir/safeMap.cpp.obj"
-  "C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.cpp" "C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/signature_calc.dir/safeQueue.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
