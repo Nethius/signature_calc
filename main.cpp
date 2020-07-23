@@ -104,6 +104,7 @@ int main() {
     std::cin >> blockSize;
 
     std::cout << "Enter thread count, min count 3: " << std::endl;
+    std::cout << "1 thread for read, 1 for write and 1 calc hash. " << std::endl;
     size_t threadCount;
     std::cin >> threadCount;
     if (threadCount < 3)
