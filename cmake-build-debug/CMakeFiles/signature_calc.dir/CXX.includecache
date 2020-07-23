@@ -22,12 +22,24 @@ C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h
 safeMap.h
 C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h
 
+C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.cpp
+safeMap.h
+C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h
+chrono
+-
+
 C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h
 map
 -
 mutex
 -
 memory
+-
+
+C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.cpp
+safeQueue.h
+C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h
+chrono
 -
 
 C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h

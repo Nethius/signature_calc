@@ -82,8 +82,7 @@ void writeFileTask(std::string path, SafeMap& map, bool& isCalcEnded)
     fs.close();
 }
 
-int main()
-{
+int main() {
     std::cout << "Enter path for input file: " << std::endl;
     std::string inputFile;
     std::cin >> inputFile;
@@ -106,11 +105,32 @@ int main()
     SafeMap map;
     bool isFileReaded = false;
     bool isCalcEnded = false;
-    auto readRes = std::async(readFileTask, std::ref(queue), blockSize, std::ref(isFileReaded), inputFile);
-    auto writeRes = std::async(writeFileTask, outputFile, std::ref(map), std::ref(isCalcEnded));
+    std::future<void> readRes;
+    std::future<void> writeRes;
+
+    try {
+        readRes = std::async(readFileTask, std::ref(queue), blockSize, std::ref(isFileReaded), inputFile);
+    }
+    catch (...) {
+        std::cout << "Error with read task occurred" << std::endl;
+    }
+    try {
+        writeRes = std::async(writeFileTask, outputFile, std::ref(map), std::ref(isCalcEnded));
+    }
+    catch (...) {
+        std::cout << "Error with write task occurred" << std::endl;
+    }
+
     std::vector<std::future<void>> futures;
-    for (size_t i = 0; i < threadCount; i++)
-        futures.push_back(std::async(calcCrcTask, std::ref(queue), blockSize, std::ref(isFileReaded), std::ref(map), i));
+    for (size_t i = 0; i < threadCount; i++) {
+        try {
+            futures.push_back(
+                    std::async(calcCrcTask, std::ref(queue), blockSize, std::ref(isFileReaded), std::ref(map), i));
+        }
+        catch (...) {
+            std::cout << "Error with calc task occurred" << std::endl;
+        }
+    }
 
     for (size_t i = 0; i < threadCount; i++)
         futures[i].wait();
