@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/developer_stag/CLionProjects/signature_calc/main.cpp
+iostream
+-
+chrono
+-
+unordered_map
+-
+fstream
+-
+future
+-
+safeQueue.h
+C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h
+safeMap.h
+C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h
+
+C:/Users/developer_stag/CLionProjects/signature_calc/safeMap.h
+map
+-
+mutex
+-
+memory
+-
+
+C:/Users/developer_stag/CLionProjects/signature_calc/safeQueue.h
+queue
+-
+mutex
+-
+memory
+-
+

@@ -1,0 +1,3 @@
+C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/signature_calc.dir
+C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/developer_stag/CLionProjects/signature_calc/cmake-build-debug/CMakeFiles/rebuild_cache.dir
