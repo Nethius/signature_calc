@@ -17,14 +17,12 @@ class SafeQueue
 public:
     void push(T value, size_t index)
     {
-        while(!mutex.try_lock())
-            ;
+        mutex.lock();
         queue.push(std::make_pair(index, value));
         mutex.unlock();
     }
     pair_t frontAndPop() {
-        while (!mutex.try_lock())
-            ;
+        mutex.lock();
         pair_t hash;
         hash.second = 0;
         if (queue.size()) {
@@ -36,8 +34,7 @@ public:
     }
     size_t size()
     {
-        while(!mutex.try_lock())
-            ;
+        mutex.lock();
         size_t size = queue.size();
         mutex.unlock();
         return size;
